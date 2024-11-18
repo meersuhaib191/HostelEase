@@ -1,0 +1,144 @@
+
+// Check if the modal has been shown in the current session
+if (!isset($_SESSION['attendance_modal_shown'])) {
+    $_SESSION['attendance_modal_shown'] = false;
+}
+
+// Fetch dashboard data and other variables...
+$query = "
+    SELECT 
+        (SELECT COUNT(*) FROM userregistration) AS total_students,
+        (SELECT COUNT(*) FROM rooms) AS total_rooms,
+        (SELECT COUNT(*) FROM rooms) * 4 AS total_capacity,
+        (SELECT COUNT(*) FROM attendance_details WHERE day" . date('j') . " = 'P' AND month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE())) AS present_today
+";
+$result = $mysqli->query($query);
+$data = $result->fetch_assoc();
+
+// Attendance form handling
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $currentDay = date('j'); 
+    $currentMonth = date('m'); 
+    $currentYear = date('Y'); 
+    $currentTime = strtotime(date('H:i:s')); 
+    $cutoffTime = strtotime("24:30:00");
+
+    if ($currentTime > $cutoffTime) {
+        echo "<script>alert('Attendance marking is closed for today!');</script>";
+    } else {
+        $userId = $_SESSION['id']; 
+        $action = $_POST['action']; 
+        $dayColumn = "day" . $currentDay;
+
+        // Check if attendance is already marked for today
+        $checkQuery = "SELECT $dayColumn FROM attendance_details WHERE id = ? AND month = ? AND year = ?";
+        $stmt = $mysqli->prepare($checkQuery);
+        $stmt->bind_param('iii', $userId, $currentMonth, $currentYear);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            // Attendance already marked, update the day column
+            $stmt = $mysqli->prepare("
+                UPDATE attendance_details
+                SET $dayColumn = ?, 
+                    days_present = CASE WHEN ? = 'P' THEN days_present + 1 ELSE days_present END
+                WHERE id = ? AND month = ? AND year = ?
+            ");
+            $stmt->bind_param('ssiii', $action, $action, $userId, $currentMonth, $currentYear);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $_SESSION['attendance_modal_shown'] = true; // Mark modal as shown
+                // Redirect to avoid form re-submission
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } else {
+                echo "<script>alert('Error updating attendance. Please try again.');</script>";
+            }
+        } else {
+            // Attendance not yet marked, insert new record
+            $stmt = $mysqli->prepare("
+                INSERT INTO attendance_details (id, month, year, $dayColumn, days_present)
+                VALUES (?, ?, ?, ?, ?)
+            ");
+            $stmt->bind_param('iiis', $userId, $currentMonth, $currentYear, $action);
+            $stmt->execute();
+            
+            if ($stmt->affected_rows > 0) {
+                $_SESSION['attendance_modal_shown'] = true; // Mark modal as shown
+                // Redirect to avoid form re-submission
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            } else {
+                echo "<script>alert('Error updating attendance. Please try again.');</script>";
+            }
+        }
+        $stmt->close();
+    }
+}
+
+
+
+
+
+   <!-- Attendance Modal -->
+<div id="attendanceModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="attendanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="attendanceModalLabel">Mark Attendance</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="attendanceForm">
+                    <input type="hidden" name="action" id="attendanceAction">
+                    <div class="form-group">
+                        <label for="attendanceStatus">Attendance Status:</label>
+                        <div class="attendance-buttons">
+                            <button type="button" class="btn btn-success" id="presentBtn" onclick="setAttendance('P')">Present</button>
+                            <button type="button" class="btn btn-danger" id="absentBtn" onclick="setAttendance('A')">Absent</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+
+    <script>
+window.onload = function () {
+    const modal = $('#attendanceModal');
+    const currentTime = new Date();
+    const cutoffTime = new Date();
+    cutoffTime.setHours(24, 30, 0, 0); // Set cutoff time to 24:30
+
+    // PHP session check for modal display
+    <?php if (!$_SESSION['attendance_modal_shown']) { ?>
+        if (currentTime <= cutoffTime) {
+            modal.modal('show'); // Show the modal
+        }
+    <?php } ?>
+};
+
+// Set attendance and submit form
+function setAttendance(status) {
+    document.getElementById('attendanceAction').value = status; // Set hidden input value
+    document.getElementById('attendanceForm').submit(); // Submit the form automatically
+}
+
+
+// Close the modal
+function closeModal() {
+    const modal = document.getElementById('attendanceModal');
+    if (modal) {
+        modal.style.display = 'none'; // Hide the modal
+    }
+}
+
+
+    </script>
