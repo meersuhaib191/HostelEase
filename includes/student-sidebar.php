@@ -36,8 +36,12 @@
                 <span class="hide-menu">Administration Info</span>
             </a>
         </li>
-
-
+        <li class="sidebar-item"> 
+    <a class="sidebar-link sidebar-link" href="student-complaints.php" aria-expanded="false">
+        <i class="fas fa-exclamation-circle"></i>
+        <span class="hide-menu">Register Complaint</span>
+    </a>
+</li>
 
 
 

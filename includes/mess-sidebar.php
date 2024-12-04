@@ -4,7 +4,7 @@
 
     <ul id="sidebarnav">
     
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="dashboard.php"
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="../messcommittee/dashboard.php"
         aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
          class="hide-menu">Dashboard</span></a></li>
 
@@ -12,54 +12,43 @@
 
         <li class="nav-small-cap"><span class="hide-menu">Features</span></li>
                             
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="register-student.php"
-        aria-expanded="false"><i class="fas fa-user-plus"></i><span
-        class="hide-menu">Register Student</span></a></li>
+
 
 
 
         <li class="sidebar-item">
-    <a class="sidebar-link" href="attendance.php" aria-expanded="false">
+    <a class="sidebar-link" href="../messcommittee/attendance.php" aria-expanded="false">
         <i data-feather="check-square"></i>
         <span class="hide-menu">View Attendance</span>
     </a>
 </li>
 
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="manage-students.php"
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="../messcommittee/manage-students.php"
         aria-expanded="false"><i class="fas fa-users"></i><span
         class="hide-menu">Students Info</span></a></li>
 
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="manage-rooms.php"
-        aria-expanded="false"><i class="fas fa-bed"></i><span
-        class="hide-menu">Manage Rooms</span></a></li>
-        <li class="sidebar-item"> 
-    <a class="sidebar-link sidebar-link" href="mess_committee.php" aria-expanded="false">
-        <i class="fas fa-users"></i>
-        <span class="hide-menu">Mess Committee</span>
-    </a>
-</li>
 
 
         <li class="sidebar-item">
-    <a class="sidebar-link" href="billing.php" aria-expanded="false">
+    <a class="sidebar-link" href="../messcommittee/billing.php" aria-expanded="false">
         <i data-feather="dollar-sign" class="feather-icon"></i>
         <span class="hide-menu">Billing</span>
     </a>
 </li>
 <li class="sidebar-item">
-    <a class="sidebar-link" href="administration.php" aria-expanded="false">
+    <a class="sidebar-link" href="../messcommittee/administration.php" aria-expanded="false">
         <i class="fas fa-cogs"></i> <!-- You can replace this with any icon you prefer -->
         <span class="hide-menu">Administration</span>
     </a>
 </li>
 <li class="sidebar-item"> 
-    <a class="sidebar-link sidebar-link" href="expenditures.php" aria-expanded="false">
+    <a class="sidebar-link sidebar-link" href="../messcommittee/expenditures.php" aria-expanded="false">
         <i class="fas fa-money-bill-wave"></i>
         <span class="hide-menu">Expenditures</span>
     </a>
 </li>
 <li class="sidebar-item"> 
-    <a class="sidebar-link sidebar-link" href="complaints.php" aria-expanded="false">
+    <a class="sidebar-link sidebar-link" href="../messcommittee/complaints_s.php" aria-expanded="false">
         <i class="fas fa-exclamation-circle"></i>
         <span class="hide-menu">Complaints</span>
     </a>

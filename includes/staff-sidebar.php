@@ -31,7 +31,12 @@
                 <span class="hide-menu">Administration Info</span>
             </a>
         </li>
-
+        <li class="sidebar-item"> 
+    <a class="sidebar-link sidebar-link" href="complaints_s.php" aria-expanded="false">
+        <i class="fas fa-exclamation-circle"></i>
+        <span class="hide-menu">Complaints</span>
+    </a>
+</li>
 
 
 

@@ -1,64 +1,30 @@
-<?php
+
+ <?php
 session_start();
 include('../includes/dbconn.php');
+include('../includes/check-login.php');
+check_login();
 
-
-if (isset($_POST['submit'])) {
-    $enno = $_POST['enno'];
-    $fname = $_POST['fname'];
-    $mname = $_POST['mname'];
-    $lname = $_POST['lname'];
-    $student_name = $fname . " " . $mname . " " . $lname;
-    $gender = $_POST['gender'];
+// Check if form is submitted
+if (isset($_POST['add_staff'])) {
+    // Get form values
+    $staff_name = $_POST['staff_name'];
+    $role = $_POST['role'];
+    $contact = $_POST['contact'];
+    $email = $_POST['email'];
     $address = $_POST['address'];
-    $contactno = $_POST['contact'];
-    $emailid = $_POST['email'];
     $password = md5($_POST['password']);
-    $course = $_POST['course'];
-    $batch = $_POST['batch'];
 
-    // Check if the enrollment number already exists
-    $query = "SELECT * FROM userRegistration WHERE enrollment_no = ?";
+    // Prepare query to insert new staff record
+    $query = "INSERT INTO staff (staff_name, role, contact, email, address,password, created_at, updated_at) 
+              VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param('s', $enno);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt->bind_param('ssssss', $staff_name, $role, $contact, $email, $address,$password);
 
-    if ($result->num_rows > 0) {
-        // If enrollment number exists, show an error message and stop the registration process
-        echo "<script>alert('Enrollment Number already exists! Please enter a different number.');</script>";
+    if ($stmt->execute()) {
+        echo "<script>alert('New staff member added successfully'); window.location='administration.php';</script>";
     } else {
-        // Fetch hostel name from admin table
-        $aid = $_SESSION['id'];
-        $ret = "SELECT hostel_name FROM admin WHERE id=?";
-        $stmt = $mysqli->prepare($ret);
-        $stmt->bind_param('i', $aid);
-        $stmt->execute();
-        $res = $stmt->get_result();
-
-        if ($row = $res->fetch_assoc()) {
-            $hostel_name = $row['hostel_name'];
-        } else {
-            $hostel_name = "HostelEase"; // Default if not found
-        }
-
-        // Insert into userRegistration table
-        $query = "INSERT INTO userRegistration (enrollment_no, firstName, middleName, lastName, gender,address , contactNo, email, password, course, batch) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $mysqli->prepare($query);
-        $stmt->bind_param('sssssssssss', $enno, $fname, $mname, $lname, $gender,$address , $contactno, $emailid, $password, $course, $batch);
-        $stmt->execute();
-
-        // Insert into attendance_details with initial values
-        $attendance_query = "INSERT INTO attendance_details (student_name, enrollment_no, course, batch, days_present, month, year) 
-                             VALUES (?, ?, ?, ?, 0, MONTH(CURDATE()), YEAR(CURDATE()))";
-        $attendance_stmt = $mysqli->prepare($attendance_query);
-        $attendance_stmt->bind_param('ssss', $student_name, $enno, $course, $batch);
-        $attendance_stmt->execute();
-
-        
-        header("Location: success_page.php"); // Change this to your success page or same page
-        exit();  // Make sure to call exit to stop further script execution
+        echo "<script>alert('Error adding staff member');</script>";
     }
 }
 ?>
@@ -115,21 +81,13 @@ if (isset($_POST['submit'])) {
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
         <header class="topbar" data-navbarbg="skin6">
-            <?php include 'includes/navigation.php'?>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin6">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar" data-sidebarbg="skin6">
-                <?php include 'includes/sidebar.php'?>
-            </div>
-            <!-- End Sidebar scroll-->
-        </aside>
+        <?php include '../includes/mess-navigation.php'; ?>
+    </header>
+    <aside class="left-sidebar" data-sidebarbg="skin6">
+        <div class="scroll-sidebar" data-sidebarbg="skin6">
+            <?php include '../includes/mess-sidebar.php'; ?>
+        </div>
+    </aside>
         <!-- ============================================================== -->
         <!-- End Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
@@ -137,14 +95,13 @@ if (isset($_POST['submit'])) {
         <!-- Page wrapper  -->
         <!-- ============================================================== -->
         <div class="page-wrapper">
-        
             <!-- ============================================================== -->
             <!-- Bread crumb and right sidebar toggle -->
             <!-- ============================================================== -->
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
-                    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1"><?php echo $hostel_name; ?><br><br>Student Registration Form</h4>
+                    <h4 class="page-title text-truncate text-dark font-weight-medium mb-1">Add Staff Members</h4>
                         <div class="d-flex align-items-center">
                             <!-- <nav aria-label="breadcrumb">
                                 
@@ -165,15 +122,24 @@ if (isset($_POST['submit'])) {
             <form method="POST" name="registration" onSubmit="return valid();">
     <div class="row">
         <!-- Registration Number Field -->
-        
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Staff Name</h4>
+                    <div class="form-group">
+                        <input type="text" name="staff_name" placeholder="Enter Staff Member Name" id="staff_name" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- First Name Field -->
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">First Name</h4>
+                    <h4 class="card-title">Role</h4>
                     <div class="form-group">
-                        <input type="text" name="fname" id="fname" placeholder="Enter First Name" required class="form-control">
+                        <input type="text" name="role" id="role" placeholder="Enter Role" required class="form-control">
                     </div>
                 </div>
             </div>
@@ -183,9 +149,9 @@ if (isset($_POST['submit'])) {
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Middle Name</h4>
+                    <h4 class="card-title">Contact</h4>
                     <div class="form-group">
-                        <input type="text" name="mname" id="mname" placeholder="Enter Middle Name" class="form-control">
+                        <input type="text" name="contact" id="contact" placeholder="Enter Contact Number" class="form-control">
                     </div>
                 </div>
             </div>
@@ -195,97 +161,24 @@ if (isset($_POST['submit'])) {
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Last Name</h4>
+                    <h4 class="card-title">Email</h4>
                     <div class="form-group">
-                        <input type="text" name="lname" id="lname" placeholder="Enter Last Name" required class="form-control">
+                        <input type="text" name="email" id="email" placeholder="Enter Members Email" required class="form-control">
                     </div>
                 </div>
             </div>
         </div>
- <!-- Course Field -->
- <div class="col-sm-12 col-md-6 col-lg-4">
+       <!-- Course Field -->
+         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Course</h4>
+                    <h4 class="card-title">Address</h4>
                     <div class="form-group">
-                        <input type="text" name="course" id="course" placeholder="Enter Course" required class="form-control">
+                        <input type="text" name="address" id="address" placeholder="Enter Address" required class="form-control">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Enrollment Number</h4>
-                    <div class="form-group">
-                        <input type="text" name="enno" placeholder="Enter Enrollment Number" id="enno" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Batch Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Batch</h4>
-                    <div class="form-group">
-                        <input type="text" name="batch" id="batch" placeholder="Enter Batch" required class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Gender Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Gender</h4>
-                    <div class="form-group mb-4">
-                        <select class="custom-select mr-sm-2" id="gender" name="gender" required="required">
-                            <option selected>Choose...</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Address</h4>
-            <div class="form-group">
-                <input type="text" name="address" id="address" placeholder="Enter Address" class="form-control" required>
-            </div>
-        </div>
-    </div>
-</div>
-
-        <!-- Contact Number Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Contact Number</h4>
-                    <div class="form-group">
-                        <input type="number" name="contact" id="contact" placeholder="Your Contact" required="required" class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Email Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Email ID</h4>
-                    <div class="form-group">
-                        <input type="email" name="email" id="email" placeholder="Your Email" onBlur="checkAvailability()" required="required" class="form-control">
-                        <span id="user-availability-status" style="font-size:12px;"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Password Field -->
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
@@ -310,22 +203,21 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
 
-
-    </div>
-
+        </div>
     <!-- Submit and Reset Buttons -->
     <div class="form-actions">
         <div class="text-center">
-            <button type="submit" name="submit" class="btn btn-success">Register</button>
+            <button type="submit" name="add_staff" class="btn btn-success">Add Staff Member</button>
             <button type="reset" class="btn btn-danger">Reset</button>
         </div>
-    </div>
+    
 
 </form>
 
 
 
             </div>
+            <br>
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->

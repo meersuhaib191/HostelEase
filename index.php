@@ -17,6 +17,9 @@ if (isset($_POST['login'])) {
     } elseif ($role == 'staff') {
         $stmt = $mysqli->prepare("SELECT id, staff_name, role, email, password FROM staff WHERE email = ?");
         $stmt->bind_param('s', $email_or_username);
+    } elseif ($role == 'mess_committee') {
+        $stmt = $mysqli->prepare("SELECT id, committee_member_name, email, password FROM messcommittee WHERE email = ?");
+        $stmt->bind_param('s', $email_or_username);
     } else {
         die("Invalid role selected.");
     }
@@ -36,6 +39,8 @@ if (isset($_POST['login'])) {
         $stmt->bind_result($db_enrollment_no, $db_password, $id);
     } elseif ($role == 'staff') {
         $stmt->bind_result($id, $staff_name, $db_role, $db_email, $db_password);
+    } elseif ($role == 'mess_committee') {
+        $stmt->bind_result($id, $committee_member_name, $db_email, $db_password);
     }
 
     $stmt->fetch();
@@ -45,7 +50,7 @@ if (isset($_POST['login'])) {
     if (strlen($db_password) == 32 && md5($password) == $db_password) {
         // Update to password_hash if using an old md5 password
         $new_hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $update_stmt = $mysqli->prepare("UPDATE staff SET password = ? WHERE email = ?");
+        $update_stmt = $mysqli->prepare("UPDATE messcommittee SET password = ? WHERE email = ?");
         $update_stmt->bind_param('ss', $new_hashed_password, $email_or_username);
         $update_stmt->execute();
         $update_stmt->close();
@@ -68,11 +73,13 @@ if (isset($_POST['login'])) {
         $_SESSION['staff_name'] = $staff_name;
         $_SESSION['staff_role'] = $db_role;
         header("location:administration/dashboard.php");
+    } elseif ($role == 'mess_committee') {
+        $_SESSION['committee_member_name'] = $committee_member_name;
+        header("location:messcommittee/dashboard.php");
     }
     exit(); // Stop further execution after redirection
 }
 ?>
-
 
 <!DOCTYPE html>
 <html dir="ltr">
@@ -105,9 +112,9 @@ if (isset($_POST['login'])) {
                     passwordLabel.innerText = "Password";
                     passwordInput.placeholder = "Enter your password";
                     break;
-                case 'warden':
-                    emailOrUsernameLabel.innerText = "Aadhar Number";
-                    emailOrUsernameInput.placeholder = "Enter your Aadhar number";
+                case 'mess_committee':
+                    emailOrUsernameLabel.innerText = "Email";
+                    emailOrUsernameInput.placeholder = "Enter your email";
                     passwordLabel.innerText = "Password";
                     passwordInput.placeholder = "Enter your password";
                     break;
@@ -142,10 +149,7 @@ if (isset($_POST['login'])) {
                 </div>
                 <div class="col-lg-5 col-md-7 bg-white">
                     <div class="p-3">
-                       
-
                         <h2 class="mt-3 text-center">Login</h2>
-                        
                         <form class="mt-4" method="POST">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -155,7 +159,7 @@ if (isset($_POST['login'])) {
                                             <option value="">Select Role</option>
                                             <option value="admin">Admin</option>
                                             <option value="student">Student</option>
-                                            <option value="warden">Warden</option>
+                                            <option value="mess_committee">Mess Committee</option>
                                             <option value="staff">Staff</option>
                                         </select>
                                     </div>

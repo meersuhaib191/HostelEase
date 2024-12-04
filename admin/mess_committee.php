@@ -1,66 +1,82 @@
 <?php
 session_start();
 include('../includes/dbconn.php');
+require '../libs/PHPMailer/src/PHPMailer.php';
+require '..//libs/PHPMailer/src/SMTP.php';
 
+use PHPMailer\PHPMailer\PHPMailer;
 
+// Insert Member Logic
 if (isset($_POST['submit'])) {
-    $enno = $_POST['enno'];
-    $fname = $_POST['fname'];
-    $mname = $_POST['mname'];
-    $lname = $_POST['lname'];
-    $student_name = $fname . " " . $mname . " " . $lname;
-    $gender = $_POST['gender'];
-    $address = $_POST['address'];
-    $contactno = $_POST['contact'];
-    $emailid = $_POST['email'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
     $password = md5($_POST['password']);
-    $course = $_POST['course'];
-    $batch = $_POST['batch'];
+    $contact = $_POST['contact'];
+    $role = $_POST['role'];
 
-    // Check if the enrollment number already exists
-    $query = "SELECT * FROM userRegistration WHERE enrollment_no = ?";
+    // Check if the email already exists in messcommittee table
+    $query = "SELECT * FROM messcommittee WHERE email = ?";
     $stmt = $mysqli->prepare($query);
-    $stmt->bind_param('s', $enno);
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // If enrollment number exists, show an error message and stop the registration process
-        echo "<script>alert('Enrollment Number already exists! Please enter a different number.');</script>";
+        // If email exists, show an error message
+        echo "<script>alert('Email already exists! Please use a different email.');</script>";
     } else {
-        // Fetch hostel name from admin table
-        $aid = $_SESSION['id'];
-        $ret = "SELECT hostel_name FROM admin WHERE id=?";
-        $stmt = $mysqli->prepare($ret);
-        $stmt->bind_param('i', $aid);
-        $stmt->execute();
-        $res = $stmt->get_result();
-
-        if ($row = $res->fetch_assoc()) {
-            $hostel_name = $row['hostel_name'];
-        } else {
-            $hostel_name = "HostelEase"; // Default if not found
-        }
-
-        // Insert into userRegistration table
-        $query = "INSERT INTO userRegistration (enrollment_no, firstName, middleName, lastName, gender,address , contactNo, email, password, course, batch) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Insert into messcommittee table
+        $query = "INSERT INTO messcommittee (committee_member_name, email, password, contact_number, role) 
+                  VALUES (?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($query);
-        $stmt->bind_param('sssssssssss', $enno, $fname, $mname, $lname, $gender,$address , $contactno, $emailid, $password, $course, $batch);
+        $stmt->bind_param('sssss', $name, $email, $password, $contact, $role);
         $stmt->execute();
 
-        // Insert into attendance_details with initial values
-        $attendance_query = "INSERT INTO attendance_details (student_name, enrollment_no, course, batch, days_present, month, year) 
-                             VALUES (?, ?, ?, ?, 0, MONTH(CURDATE()), YEAR(CURDATE()))";
-        $attendance_stmt = $mysqli->prepare($attendance_query);
-        $attendance_stmt->bind_param('ssss', $student_name, $enno, $course, $batch);
-        $attendance_stmt->execute();
-
-        
-        header("Location: success_page.php"); // Change this to your success page or same page
-        exit();  // Make sure to call exit to stop further script execution
+        echo "<script>alert('Committee member registered successfully.');</script>";
     }
+
+    // Redirect to avoid multiple submissions
+    header("Location: mess_committee.php");
+    exit();
 }
+
+// Update Committee Member Logic
+if (isset($_POST['edit_member'])) {
+    $id = $_POST['id']; // Get member ID for editing
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $contact = $_POST['contact'];
+    $role = $_POST['role'];
+
+    // Update the committee member in the database
+    $query = "UPDATE messcommittee SET committee_member_name = ?, email = ?, contact_number = ?, role = ? WHERE id = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param('ssssi', $name, $email, $contact, $role, $id);
+    $stmt->execute();
+
+    echo "<script>alert('Committee member updated successfully.');</script>";
+    return
+    exit();
+}
+
+// Delete Member Logic
+if (isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+
+    // Delete the member from the database
+    $query = "DELETE FROM messcommittee WHERE id = ?";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+
+    echo "<script>alert('Committee member deleted successfully.');</script>";
+    header("Location: mess_committee.php");
+    exit();
+}
+
+// Fetch mess committee members to display in table
+$query = "SELECT * FROM messcommittee";
+$result = $mysqli->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -164,102 +180,17 @@ if (isset($_POST['submit'])) {
 
             <form method="POST" name="registration" onSubmit="return valid();">
     <div class="row">
-        <!-- Registration Number Field -->
-        
-
-        <!-- First Name Field -->
+        <!-- Committee Member Name Field -->
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">First Name</h4>
+                    <h4 class="card-title">Name</h4>
                     <div class="form-group">
-                        <input type="text" name="fname" id="fname" placeholder="Enter First Name" required class="form-control">
+                        <input type="text" name="name" id="name" placeholder="Enter Full Name" required class="form-control">
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Middle Name Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Middle Name</h4>
-                    <div class="form-group">
-                        <input type="text" name="mname" id="mname" placeholder="Enter Middle Name" class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Last Name Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Last Name</h4>
-                    <div class="form-group">
-                        <input type="text" name="lname" id="lname" placeholder="Enter Last Name" required class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
- <!-- Course Field -->
- <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Course</h4>
-                    <div class="form-group">
-                        <input type="text" name="course" id="course" placeholder="Enter Course" required class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Enrollment Number</h4>
-                    <div class="form-group">
-                        <input type="text" name="enno" placeholder="Enter Enrollment Number" id="enno" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Batch Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Batch</h4>
-                    <div class="form-group">
-                        <input type="text" name="batch" id="batch" placeholder="Enter Batch" required class="form-control">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Gender Field -->
-        <div class="col-sm-12 col-md-6 col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Gender</h4>
-                    <div class="form-group mb-4">
-                        <select class="custom-select mr-sm-2" id="gender" name="gender" required="required">
-                            <option selected>Choose...</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Address</h4>
-            <div class="form-group">
-                <input type="text" name="address" id="address" placeholder="Enter Address" class="form-control" required>
-            </div>
-        </div>
-    </div>
-</div>
 
         <!-- Contact Number Field -->
         <div class="col-sm-12 col-md-6 col-lg-4">
@@ -310,7 +241,22 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
 
-
+        <!-- Role Field (Committee Position) -->
+        <div class="col-sm-12 col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Role</h4>
+                    <div class="form-group">
+                        <select class="custom-select mr-sm-2" id="role" name="role" required="required">
+                            <option selected>Choose Role...</option>
+                            <option value="Member">Member</option>
+                            <option value="Secretary">Secretary</option>
+                            <option value="Chairperson">Chairperson</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Submit and Reset Buttons -->
@@ -320,12 +266,104 @@ if (isset($_POST['submit'])) {
             <button type="reset" class="btn btn-danger">Reset</button>
         </div>
     </div>
-
 </form>
+<h4 class="text-center mt-5">Mess Committee Members</h4>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while($row = $result->fetch_assoc()): ?>
+                    <tr>
+    <td><?php echo $row['committee_member_name']; ?></td>
+    <td><?php echo $row['email']; ?></td>
+    <td><?php echo $row['contact_number']; ?></td>
+    <td><?php echo $row['role']; ?></td>
+    <td>
+        <button class="btn btn-primary edit-btn" 
+                data-id="<?php echo $row['id']; ?>" 
+                data-name="<?php echo $row['committee_member_name']; ?>" 
+                data-email="<?php echo $row['email']; ?>" 
+                data-contact="<?php echo $row['contact_number']; ?>" 
+                data-role="<?php echo $row['role']; ?>">Edit</button>
+
+        <button class="btn btn-danger delete-btn" 
+                data-id="<?php echo $row['id']; ?>">Delete</button>
+    </td>
+</tr>
+
+                <?php endwhile; ?>
+            </tbody>
+        </table>
 
 
 
             </div>
+            <!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Committee Member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editForm" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_name">Name</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_email">Email</label>
+                        <input type="email" class="form-control" id="edit_email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_contact">Contact Number</label>
+                        <input type="text" class="form-control" id="edit_contact" name="contact" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_role">Role</label>
+                        <select class="form-control" id="edit_role" name="role" required>
+                            <option value="Member">Member</option>
+                            <option value="Secretary">Secretary</option>
+                            <option value="Chairperson">Chairperson</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="edit_member">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this committee member?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDelete" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
@@ -386,6 +424,34 @@ if (isset($_POST['submit'])) {
             }
         });
     }
+    // Open Edit Modal and populate data
+$(document).on('click', '.edit-btn', function() {
+    var memberId = $(this).data('id');
+    var memberName = $(this).data('name');
+    var memberEmail = $(this).data('email');
+    var memberContact = $(this).data('contact');
+    var memberRole = $(this).data('role');
+
+    // Populate the modal fields
+    $('#edit_name').val(memberName);
+    $('#edit_email').val(memberEmail);
+    $('#edit_contact').val(memberContact);
+    $('#edit_role').val(memberRole);
+
+    // Store the member ID in the hidden field
+    $('#editForm').append('<input type="hidden" name="id" value="' + memberId + '">');
+
+    // Show the modal
+    $('#editModal').modal('show');
+});
+
+// Open Delete Modal and confirm action
+$(document).on('click', '.delete-btn', function() {
+    var memberId = $(this).data('id');
+    $('#confirmDelete').attr('href', 'delete_member.php?id=' + memberId);
+    $('#deleteModal').modal('show');
+});
+
     </script>
 </body>
 
