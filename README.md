@@ -1,10 +1,28 @@
-# Hostel Management System 
-This Online Hostel Management System Project in PHP, in particular, primarily concentrates on the management and booking sides of hostels. To be more explicit, the system facilitates online registration and hostel room reservations for students. Additionally, the system has tools for managing rooms as well as all of the students. 
-The system also enables the administration of course, room, and student registration. Evidently, this project has both a student panel and an admin panel. Registered students can easily book hostel rooms and view the details of booked rooms in an overview of this web application. The student must choose a room number, hostel amenities, length of stay, personal information, and more while making a hostel reservation. After choosing any of the available room numbers, the system in this case instantly notifies the student of any available seats. The student can also check information about their room, such as the room number, amenities, total cost, length of stay, and more.
+#Hostel Management System
+A web-based Hostel Management System built with PHP, MySQL, HTML, CSS, JavaScript, and Bootstrap. This project focuses on streamlining hostel operations, including online student registration, room bookings, and administrative management. It provides a user-friendly interface for both students and admins to handle reservations, room details, and overall hostel administration.
 
+**Features**
+Student Panel:
 
-![Screenshots](./imgs/Screenshot 2026-02-04 021323.pngdashboard.png)
-![Screenshots](./imgs/Screenshot 2026-02-04 021340.pngdashboard.png)
-![Screenshots](./imgs/Screenshot 2026-02-04 021448.pngdashboard.png)
-![Screenshots](./imgs/Screenshot 2026-02-04 021728.pngdashboard.png)
+View room details, including room number, amenities,mark attendance etc
+
+Admin Panel:
+
+Manage rooms, students, and course registrations.
+Oversee room capacity, student attendance, and overall system stats.
+Dashboard with real-time data on registered students, total rooms, capacity, and daily attendance.
+
+General:
+
+Secure login system for students and admins.
+Responsive design for mobile and desktop use.
+
+**Screenshots**
+Here are some key screenshots from the system:
+
+**Technologies Used**
+Backend: PHP, MySQL
+Frontend: HTML, CSS, JavaScript, Bootstrap
+Libraries: jQuery, DataTables, Chart.js (for dashboards)
+Tools: XAMPP, phpMyAdmin
 
