@@ -19,7 +19,19 @@ Responsive design for mobile and desktop use.
 
 **Screenshots**
 Here are some key screenshots from the system:
+## 📸 Screenshots
 
+
+![Login](https://raw.githubusercontent.com/meersuhaib191/HostelEase/main/imgs/Screenshot%202026-02-04%20021323.png)
+
+
+![Dashboard](https://raw.githubusercontent.com/meersuhaib191/HostelEase/main/imgs/Screenshot%202026-02-04%20021340.png)
+
+
+![Hostel](https://raw.githubusercontent.com/meersuhaib191/HostelEase/main/imgs/Screenshot%202026-02-04%20021448.png)
+
+
+![Admin](https://raw.githubusercontent.com/meersuhaib191/HostelEase/main/imgs/Screenshot%202026-02-04%20021728.png)
 **Technologies Used**
 Backend: PHP, MySQL
 Frontend: HTML, CSS, JavaScript, Bootstrap
