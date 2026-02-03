@@ -19,7 +19,7 @@ Responsive design for mobile and desktop use.
 
 **Screenshots**
 Here are some key screenshots from the system:
-## 📸 Screenshots
+
 
 
 ![Login](https://raw.githubusercontent.com/meersuhaib191/HostelEase/main/imgs/Screenshot%202026-02-04%20021323.png)
