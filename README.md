@@ -3,5 +3,8 @@ This Online Hostel Management System Project in PHP, in particular, primarily co
 The system also enables the administration of course, room, and student registration. Evidently, this project has both a student panel and an admin panel. Registered students can easily book hostel rooms and view the details of booked rooms in an overview of this web application. The student must choose a room number, hostel amenities, length of stay, personal information, and more while making a hostel reservation. After choosing any of the available room numbers, the system in this case instantly notifies the student of any available seats. The student can also check information about their room, such as the room number, amenities, total cost, length of stay, and more.
 
 
-![Screenshot (26)](https://user-images.githubusercontent.com/36708000/203343945-7eca5c5a-986a-4ffd-b7cf-c47f477904ad.png)
+![Screenshots](./imgs/Screenshot 2026-02-04 021323.pngdashboard.png)
+![Screenshots](./imgs/Screenshot 2026-02-04 021340.pngdashboard.png)
+![Screenshots](./imgs/Screenshot 2026-02-04 021448.pngdashboard.png)
+![Screenshots](./imgs/Screenshot 2026-02-04 021728.pngdashboard.png)
 
