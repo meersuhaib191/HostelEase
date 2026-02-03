@@ -1,5 +1,5 @@
 <?php
-    require_once("../includes/dbconn.php");
+    require_once("../libs/includes/dbconn.php");
     if(!empty($_POST["emailid"])) {
         $email= $_POST["emailid"];
         if (filter_var($email, FILTER_VALIDATE_EMAIL)===false) {

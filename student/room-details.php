@@ -1,7 +1,7 @@
 <?php
     session_start();
-    include('../includes/dbconn.php');
-    include('../includes/check-login.php');
+    include('../libs/includes/dbconn.php');
+    include('../libs/includes/check-login.php');
     check_login();
 ?>
 
@@ -45,7 +45,7 @@
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
         <header class="topbar" data-navbarbg="skin6">
-             <?php include '../includes/student-navigation.php'?>
+             <?php include '../libs/includes/student-navigation.php'?>
         </header>
         <!-- ============================================================== -->
         <!-- End Topbar header -->
@@ -56,7 +56,7 @@
         <aside class="left-sidebar" data-sidebarbg="skin6">
             <!-- Sidebar scroll-->
             <div class="scroll-sidebar" data-sidebarbg="skin6">
-                <?php include '../includes/student-sidebar.php'?>
+                <?php include '../libs/includes/student-sidebar.php'?>
             </div>
             <!-- End Sidebar scroll-->
         </aside>
@@ -235,7 +235,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

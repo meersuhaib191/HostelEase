@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 if (isset($_POST['submit'])) {
@@ -47,12 +47,12 @@ if (isset($_POST['submit'])) {
         data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
 
         <header class="topbar" data-navbarbg="skin6">
-            <?php include '../includes/student-navigation.php' ?>
+            <?php include '../libs/includes/student-navigation.php' ?>
         </header>
 
         <aside class="left-sidebar" data-sidebarbg="skin6">
             <div class="scroll-sidebar" data-sidebarbg="skin6">
-                <?php include '../includes/student-sidebar.php' ?>
+                <?php include '../libs/includes/student-sidebar.php' ?>
             </div>
         </aside>
 
@@ -121,7 +121,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>
-            <?php include '../includes/footer.php'; ?>
+            <?php include '../libs/includes/footer.php'; ?>
         </div>
 
 <script src="../assets/libs/jquery/dist/jquery.min.js"></script>

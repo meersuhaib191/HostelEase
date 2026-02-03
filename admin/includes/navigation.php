@@ -1,5 +1,5 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 $aid = $_SESSION['id'];
 $ret = "SELECT hostel_name FROM admin WHERE id=?";

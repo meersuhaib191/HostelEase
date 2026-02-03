@@ -1,5 +1,5 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);

@@ -32,7 +32,7 @@ function sendEmail($to, $subject, $body, $hostelname) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    include('../includes/dbconn.php');
+    include('../libs/includes/dbconn.php');
 
     // Fetch hostel name
     $query = "SELECT hostel_name FROM admin LIMIT 1";

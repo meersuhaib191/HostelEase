@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 require '../libs/PHPMailer/src/PHPMailer.php';
 require '../libs/PHPMailer/src/SMTP.php';
 

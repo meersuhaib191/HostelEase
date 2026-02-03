@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 
 if (isset($_POST['submit'])) {
@@ -332,7 +332,7 @@ if (isset($_POST['submit'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

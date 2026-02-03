@@ -1,5 +1,5 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 $aid = $_SESSION['id'];
 $ret = "SELECT hostel_name FROM admin WHERE id=?";
@@ -69,12 +69,12 @@ if ($row = $res->fetch_assoc()) {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <img src="../assets/images/users/admin-icn.png" alt="user" class="rounded-circle"
-                                    width="35">
+                                <img src="../assets/images/users/user-icn.png" alt="user" class="rounded-circle"
+                                    width="40">
                                 
                                     <?php	
                                     $aid=$_SESSION['id'];
-                                        $ret="SELECT * from messcommittee where id=?";
+                                        $ret="select * from userregistration where id=?";
                                         $stmt= $mysqli->prepare($ret) ;
                                         $stmt->bind_param('i',$aid);
                                         $stmt->execute();
@@ -85,13 +85,11 @@ if ($row = $res->fetch_assoc()) {
                                             ?>	
 
                                 <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
-                                        class="text-dark"><?php echo $row->committee_member_name; }?></span> <i data-feather="chevron-down"
+                                        class="text-dark"><?php echo $row->firstName; }?></span> <i data-feather="chevron-down"
                                         class="svg-icon"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
-                                <a class="dropdown-item" href="profile.php"><i data-feather="user"
-                                        class="svg-icon mr-2 ml-1"></i>
-                                    My Profile</a>
+                               
                                 
                                 
                                 <div class="dropdown-divider"></div>
@@ -110,6 +108,5 @@ if ($row = $res->fetch_assoc()) {
                         <!-- User profile -->
                         <!-- ============================================================== -->
                     </ul>
-                    
                 </div>
             </nav>

@@ -1,5 +1,5 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 // Get today's and yesterday's date
 $currentDay = date('j');

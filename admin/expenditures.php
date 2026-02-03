@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 ?>
 
@@ -210,7 +210,7 @@ while ($row = $res->fetch_object()) {
     </div>
 </div>
 
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
         </div>
     </div>
 

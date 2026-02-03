@@ -1,5 +1,5 @@
 <?php
-    include('../includes/pdoconfig.php');
+    include('../libs/includes/pdoconfig.php');
     if(!empty($_POST["roomid"])) {	
     $id=$_POST['roomid'];
     $stmt = $DB_con->prepare("SELECT * FROM rooms WHERE room_no = :id");

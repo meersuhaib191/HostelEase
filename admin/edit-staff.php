@@ -1,5 +1,5 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = intval($_POST['id']);

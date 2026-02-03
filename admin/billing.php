@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Fetch the bill per day from the session if it's set
@@ -151,7 +151,7 @@ $studentsResult = $stmt->get_result();
     </div>
 </div>
 
-        <?php include '../includes/footer.php' ?>
+        <?php include '../libs/includes/footer.php' ?>
     </div>
 </div>
 

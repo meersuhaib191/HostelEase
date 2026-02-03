@@ -1,7 +1,18 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
+$aid = $_SESSION['id'];
+$ret = "SELECT hostel_name FROM admin WHERE id=?";
+$stmt = $mysqli->prepare($ret);
+$stmt->bind_param('i', $aid);
+$stmt->execute();
+$res = $stmt->get_result();
 
+if ($row = $res->fetch_assoc()) {
+    $hostel_name = $row['hostel_name'];
+} else {
+    $hostel_name = "HostelEase"; // Default name if no name is found
+}
 ?>
 
 <nav class="navbar top-navbar navbar-expand-md">
@@ -58,12 +69,12 @@ include('../includes/dbconn.php');
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
-                                <img src="../assets/images/users/user-icn.png" alt="user" class="rounded-circle"
-                                    width="40">
+                                <img src="../assets/images/users/admin-icn.png" alt="user" class="rounded-circle"
+                                    width="35">
                                 
                                     <?php	
                                     $aid=$_SESSION['id'];
-                                        $ret="select * from staff where id=?";
+                                        $ret="SELECT * from messcommittee where id=?";
                                         $stmt= $mysqli->prepare($ret) ;
                                         $stmt->bind_param('i',$aid);
                                         $stmt->execute();
@@ -74,11 +85,13 @@ include('../includes/dbconn.php');
                                             ?>	
 
                                 <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
-                                        class="text-dark"><?php echo $row->staff_name; }?></span> <i data-feather="chevron-down"
+                                        class="text-dark"><?php echo $row->committee_member_name; }?></span> <i data-feather="chevron-down"
                                         class="svg-icon"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
-                               
+                                <a class="dropdown-item" href="profile.php"><i data-feather="user"
+                                        class="svg-icon mr-2 ml-1"></i>
+                                    My Profile</a>
                                 
                                 
                                 <div class="dropdown-divider"></div>
@@ -97,5 +110,6 @@ include('../includes/dbconn.php');
                         <!-- User profile -->
                         <!-- ============================================================== -->
                     </ul>
+                    
                 </div>
             </nav>

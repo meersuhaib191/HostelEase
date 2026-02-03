@@ -1,8 +1,8 @@
 
  <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Check if form is submitted
@@ -232,7 +232,7 @@ if (isset($_POST['add_staff'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

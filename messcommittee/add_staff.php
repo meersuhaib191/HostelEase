@@ -1,8 +1,8 @@
 
  <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Check if form is submitted
@@ -81,11 +81,11 @@ if (isset($_POST['add_staff'])) {
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
         <header class="topbar" data-navbarbg="skin6">
-        <?php include '../includes/mess-navigation.php'; ?>
+        <?php include '../libs/includes/mess-navigation.php'; ?>
     </header>
     <aside class="left-sidebar" data-sidebarbg="skin6">
         <div class="scroll-sidebar" data-sidebarbg="skin6">
-            <?php include '../includes/mess-sidebar.php'; ?>
+            <?php include '../libs/includes/mess-sidebar.php'; ?>
         </div>
     </aside>
         <!-- ============================================================== -->
@@ -224,7 +224,7 @@ if (isset($_POST['add_staff'])) {
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->

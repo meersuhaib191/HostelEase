@@ -1,5 +1,5 @@
 <?php
-    include '../includes/dbconn.php';
+    include '../libs/includes/dbconn.php';
 
     $sql = "SELECT id FROM courses";
                 $query = $mysqli->query($sql);

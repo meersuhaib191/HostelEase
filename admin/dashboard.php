@@ -1,20 +1,25 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Fetch dashboard data and hostel name
 $query = "
-    SELECT 
+    SELECT
         (SELECT COUNT(*) FROM userregistration) AS total_students,
         (SELECT COUNT(*) FROM rooms) AS total_rooms,
         (SELECT COUNT(*) FROM rooms) * 4 AS total_capacity,
-        (SELECT COUNT(*) FROM attendance_details WHERE day" . date('j') . " = 'P' AND month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE())) AS present_today,
-        (SELECT hostel_name FROM admin LIMIT 1) AS hostel_name
+        (SELECT COUNT(*) FROM attendance_details WHERE day" . date('j') . " = 'P' AND month = MONTH(CURRENT_DATE()) AND year = YEAR(CURRENT_DATE())) AS present_today
 ";
 $result = $mysqli->query($query);
 $data = $result->fetch_assoc();
+
+// Fetch hostel name separately
+$hostel_query = "SELECT username FROM admin LIMIT 1";
+$hostel_result = $mysqli->query($hostel_query);
+$hostel_data = $hostel_result->fetch_assoc();
+$hostel_name = $hostel_data['username'];
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -236,7 +241,7 @@ $data = $result->fetch_assoc();
 </div>
             </div>
 
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 // Calculate total expenditure and total attendance
 $expenditureQuery = "SELECT SUM(amount) AS total_expenditure FROM expenditure";

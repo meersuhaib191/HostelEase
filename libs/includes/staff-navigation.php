@@ -1,18 +1,7 @@
 <?php
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
-$aid = $_SESSION['id'];
-$ret = "SELECT hostel_name FROM admin WHERE id=?";
-$stmt = $mysqli->prepare($ret);
-$stmt->bind_param('i', $aid);
-$stmt->execute();
-$res = $stmt->get_result();
 
-if ($row = $res->fetch_assoc()) {
-    $hostel_name = $row['hostel_name'];
-} else {
-    $hostel_name = "HostelEase"; // Default name if no name is found
-}
 ?>
 
 <nav class="navbar top-navbar navbar-expand-md">
@@ -74,7 +63,7 @@ if ($row = $res->fetch_assoc()) {
                                 
                                     <?php	
                                     $aid=$_SESSION['id'];
-                                        $ret="select * from userregistration where id=?";
+                                        $ret="select * from staff where id=?";
                                         $stmt= $mysqli->prepare($ret) ;
                                         $stmt->bind_param('i',$aid);
                                         $stmt->execute();
@@ -85,7 +74,7 @@ if ($row = $res->fetch_assoc()) {
                                             ?>	
 
                                 <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
-                                        class="text-dark"><?php echo $row->firstName; }?></span> <i data-feather="chevron-down"
+                                        class="text-dark"><?php echo $row->staff_name; }?></span> <i data-feather="chevron-down"
                                         class="svg-icon"></i></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">

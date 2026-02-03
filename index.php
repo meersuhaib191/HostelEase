@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('includes/dbconn.php');
+include('libs/includes/dbconn.php');
 
 if (isset($_POST['login'])) {
     $email_or_username = $_POST['email_or_username'];
@@ -9,7 +9,7 @@ if (isset($_POST['login'])) {
 
     // Prepare query based on the selected role
     if ($role == 'admin') {
-        $stmt = $mysqli->prepare("SELECT username, email, password, id, hostel_name FROM admin WHERE (username = ? OR email = ?)");
+        $stmt = $mysqli->prepare("SELECT username, email, password, id FROM admin WHERE (username = ? OR email = ?)");
         $stmt->bind_param('ss', $email_or_username, $email_or_username);
     } elseif ($role == 'student') {
         $stmt = $mysqli->prepare("SELECT enrollment_no, password, id FROM userregistration WHERE enrollment_no = ?");
@@ -34,7 +34,7 @@ if (isset($_POST['login'])) {
     }
 
     if ($role == 'admin') {
-        $stmt->bind_result($db_username, $db_email, $db_password, $id, $hostel_name);
+        $stmt->bind_result($db_username, $db_email, $db_password, $id);
     } elseif ($role == 'student') {
         $stmt->bind_result($db_enrollment_no, $db_password, $id);
     } elseif ($role == 'staff') {
@@ -50,7 +50,7 @@ if (isset($_POST['login'])) {
     if (strlen($db_password) == 32 && md5($password) == $db_password) {
         // Update to password_hash if using an old md5 password
         $new_hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $update_stmt = $mysqli->prepare("UPDATE messcommittee SET password = ? WHERE email = ?");
+        $update_stmt = $mysqli->prepare("UPDATE userregistration SET password = ? WHERE email = ?");
         $update_stmt->bind_param('ss', $new_hashed_password, $email_or_username);
         $update_stmt->execute();
         $update_stmt->close();
@@ -65,7 +65,6 @@ if (isset($_POST['login'])) {
     $_SESSION['role'] = $role;
 
     if ($role == 'admin') {
-        $_SESSION['hostel_name'] = $hostel_name;
         header("location:admin/dashboard.php");
     } elseif ($role == 'student') {
         header("location:student/dashboard.php");

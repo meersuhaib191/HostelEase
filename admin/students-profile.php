@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Enable error reporting for debugging
@@ -186,7 +186,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
             </div>
 
-            <?php include '../includes/footer.php' ?>
+            <?php include '../libs/includes/footer.php' ?>
         </div>
     </div>
 

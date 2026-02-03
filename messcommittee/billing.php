@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Fetch the bill per day from the session if it's set
@@ -66,11 +66,11 @@ $studentsResult = $stmt->get_result();
 <body>
 <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
 <header class="topbar" data-navbarbg="skin6">
-        <?php include '../includes/mess-navigation.php'; ?>
+        <?php include '../libs/includes/mess-navigation.php'; ?>
     </header>
     <aside class="left-sidebar" data-sidebarbg="skin6">
         <div class="scroll-sidebar" data-sidebarbg="skin6">
-            <?php include '../includes/mess-sidebar.php'; ?>
+            <?php include '../libs/includes/mess-sidebar.php'; ?>
         </div>
     </aside>
     <div class="page-wrapper">
@@ -151,7 +151,7 @@ $studentsResult = $stmt->get_result();
     </div>
 </div>
 
-        <?php include '../includes/footer.php' ?>
+        <?php include '../libs/includes/footer.php' ?>
     </div>
 </div>
 

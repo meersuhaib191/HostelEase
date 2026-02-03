@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
-include('../includes/check-login.php');
+include('../libs/includes/dbconn.php');
+include('../libs/includes/check-login.php');
 check_login();
 
 // Fetch month and year from POST request, or use the current month and year as default
@@ -145,7 +145,7 @@ $studentsResult = $stmt->get_result();
                     </div>
                 </div>
             </div>
-            <?php include '../includes/footer.php'; ?>
+            <?php include '../libs/includes/footer.php'; ?>
         </div>
     </div>
 

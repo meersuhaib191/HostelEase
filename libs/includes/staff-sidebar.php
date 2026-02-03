@@ -4,7 +4,7 @@
 
     <ul id="sidebarnav">
     
-        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="dashboard.php"
+        <li class="sidebar-item"> <a class="sidebar-link sidebar-link" href="../administration/dashboard.php"
         aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
          class="hide-menu">Dashboard</span></a></li>
 
@@ -12,18 +12,13 @@
 
         <li class="nav-small-cap"><span class="hide-menu">Features</span></li>
                             
-        <li class="sidebar-item"> 
-    <a class="sidebar-link sidebar-link" href="mark-attendance.php" aria-expanded="false">
-        <i class="fas fa-check-circle"></i> <!-- Updated icon -->
-        <span class="hide-menu">Mark Attendance</span> <!-- Updated label -->
-    </a>
-</li>
+
 
 
 
 
 <li class="sidebar-item">
-    <a class="sidebar-link" href="profile.php" aria-expanded="false">
+    <a class="sidebar-link" href="../administration/staffprofile.php" aria-expanded="false">
         <i data-feather="user"></i>
         <span class="hide-menu">My Profile</span>
     </a>
@@ -31,17 +26,18 @@
 
 
         <li class="sidebar-item">
-            <a class="sidebar-link" href="administration.php" aria-expanded="false">
+            <a class="sidebar-link" href="../administration/staff-administration.php" aria-expanded="false">
                 <i class="fas fa-cogs"></i> <!-- You can replace this with any icon you prefer -->
                 <span class="hide-menu">Administration Info</span>
             </a>
         </li>
         <li class="sidebar-item"> 
-    <a class="sidebar-link sidebar-link" href="student-complaints.php" aria-expanded="false">
+    <a class="sidebar-link sidebar-link" href="complaints_s.php" aria-expanded="false">
         <i class="fas fa-exclamation-circle"></i>
-        <span class="hide-menu">Register Complaint</span>
+        <span class="hide-menu">Complaints</span>
     </a>
 </li>
+
 
 
 

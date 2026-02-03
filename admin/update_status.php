@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 if (isset($_POST['enrollment_no']) && isset($_POST['status'])) {
     $enrollmentNo = $_POST['enrollment_no'];

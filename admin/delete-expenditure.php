@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-include('../includes/dbconn.php');
+include('../libs/includes/dbconn.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = $_POST['id'];
