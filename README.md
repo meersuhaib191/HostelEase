@@ -18,7 +18,7 @@ Secure login system for students and admins.
 Responsive design for mobile and desktop use.
 
 **Screenshots**
-Here are some key screenshots from the system:
+Here are some key screenshots from the system::
 
 
 
